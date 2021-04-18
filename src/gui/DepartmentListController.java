@@ -6,6 +6,7 @@
 package gui;
 
 import application.Program;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import java.io.IOException;
@@ -34,7 +35,7 @@ import model.services.DepartmentService;
  *
  * @author olive
  */
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
     private DepartmentService service;
     @FXML
     private TableView<Department> tableViewDepartment;
@@ -85,6 +86,8 @@ public class DepartmentListController implements Initializable {
              
              DepartmentFormController controller = loader.getController();
              controller.setDepartment(obj);
+             controller.setDepartmentService(new DepartmentService());
+             controller.subscribeDataChangeListeners(this);
              controller.updatedFormData();
              
              Stage dialogStage = new Stage();
@@ -98,5 +101,10 @@ public class DepartmentListController implements Initializable {
             Alerts.showAlert("IOException"," Error loading View", e.getMessage(), Alert.AlertType.ERROR);
         }
         
+    }
+
+    @Override
+    public void onDataChanged() {
+       UpdateTableView();
     }
 }
