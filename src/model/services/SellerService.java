@@ -1,33 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package model.services;
 
 import java.util.List;
 import model.DAO.DaoFactory;
-import model.DAO.DepartmentDAO;
-import model.entities.Department;
+import model.DAO.SellerDAO;
+import model.entities.Seller;
 
-/**
- *
- * @author olive
- */
-public class DepartmentService {
+public class SellerService {
     
-    private DepartmentDAO dao = DaoFactory.createDepartmentDao();
+    private SellerDAO dao = DaoFactory.createSellerDAO();
     
-    public List<Department> findAll() {
+    public List<Seller> findAll() {
         return dao.findAll();
     }
     
-    public void saveOrUpdate(Department obj) {
+    public void saveOrUpdate(Seller obj) {
         if (obj.getId() == null) {
             dao.insert(obj);
         } else {
             dao.update(obj);
         }
         
+    }
+    public void remove(Seller obj){
+    dao.deleteById(obj.getId());
+    
     }
 }
