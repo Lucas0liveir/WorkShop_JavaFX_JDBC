@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package gui;
 
 import application.Program;
@@ -30,11 +26,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
+import javafx.scene.control.TableCell;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 
-/**
- *
- * @author olive
- */
 public class DepartmentListController implements Initializable, DataChangeListener {
     private DepartmentService service;
     @FXML
@@ -44,6 +38,8 @@ public class DepartmentListController implements Initializable, DataChangeListen
     @FXML
     private TableColumn<Department, String> tableColumnName;
     @FXML
+    private TableColumn<Department, Department> tableColumnEDIT;
+    @FXML
     private Button btNew;
     
     private ObservableList<Department> obsList;
@@ -51,7 +47,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
     public void onBtNewAction(ActionEvent event){
     Stage parentStage = Utils.currentStage(event);
     Department obj = new Department();
-    creadDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
+    createDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
     }
     
     public void setDepartmentService(DepartmentService service){
@@ -76,9 +72,10 @@ public class DepartmentListController implements Initializable, DataChangeListen
         List<Department> list = service.findAll();
         obsList = FXCollections.observableArrayList(list);
         tableViewDepartment.setItems(obsList);
+        initEditButtons();
     }
     
-    private void creadDialogForm(Department obj, String absoluteName, Stage parentStage){
+    private void createDialogForm(Department obj, String absoluteName, Stage parentStage){
     
         try{
              FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -107,4 +104,24 @@ public class DepartmentListController implements Initializable, DataChangeListen
     public void onDataChanged() {
        UpdateTableView();
     }
+    
+    private void initEditButtons() {
+        tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnEDIT.setCellFactory(param -> new TableCell<Department, Department>() {
+                 private final Button button = new Button("edit");
+                 @Override
+                     protected void updateItem(Department obj, boolean empty) {
+                        super.updateItem(obj, empty);
+                            if (obj == null) {
+                             setGraphic(null);
+                                return;
+                            }
+                               setGraphic(button);
+                                        button.setOnAction(
+                                        event -> createDialogForm(
+                                        obj, "/gui/DepartmentForm.fxml",Utils.currentStage(event)));
+                                            }
+                                    });
+                                    } 
+
 }
