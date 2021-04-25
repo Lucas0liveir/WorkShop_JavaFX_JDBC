@@ -6,8 +6,8 @@
 package model.services;
 
 import java.util.List;
-import model.DAO.DaoFactory;
-import model.DAO.DepartmentDAO;
+import model.dao.DaoFactory;
+import model.dao.DepartmentDao;
 import model.entities.Department;
 
 /**
@@ -16,7 +16,7 @@ import model.entities.Department;
  */
 public class DepartmentService {
     
-    private DepartmentDAO dao = DaoFactory.createDepartmentDao();
+    private DepartmentDao dao = DaoFactory.createDepartmentDao();
     
     public List<Department> findAll() {
         return dao.findAll();
